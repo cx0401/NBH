@@ -12,11 +12,6 @@ def date(f='%Y-%m-%d %H:%M:%S'):
 
 
 def split_dataset(df: pd.DataFrame, test_num_per_star=1000):
-    """
-    :param df: 数据集
-    :param test_num_per_star: 从数据集中，每个评分值中，抽取的样本数量
-    :return: 训练集、测试集
-    """
     stars = defaultdict(list)
     for idx, r in df['rating'].items():
         stars[r].append(idx)
@@ -48,7 +43,7 @@ def evaluate_mse(trained_model, dataloader):
             predict = trained_model(user_id, item_id)
             mse += torch.nn.functional.mse_loss(predict, ratings, reduction='sum').item()
             sample_count += len(ratings)
-    return mse / sample_count  # dataloader上的均方误差
+    return mse / sample_count 
 
 def evaluate_predict(trained_model, dataloader):
     predicts = []
@@ -95,23 +90,12 @@ def evaluate_precision(trained_model, dataloader):
 
 
 def evaluate_top_n(trained_model, dataloader: DataLoader, candidate_items, random_candi=0, topN=5):
-    """
-    top-N推荐系统评估
-    :param trained_model: 训练好的模型
-    :param dataloader: 测试集
-    :param candidate_items: item候选集；list类型
-    :param random_candi: 默认0表示整个item候选集；大于0时表示从item候选集中为每个user随机抽取的item数量
-    :param topN: top-N推荐系统中的N
-    :return: 召回率，精确率
-    """
-    # 真实购买记录（>=4分才算正样本），即测试集
     real_data = []
     for user_id, item_id, rating in dataloader.dataset:
         if rating >= 4:
             real_data.append([int(user_id), int(item_id)])
     real_data = pd.DataFrame(real_data, columns=['userID', 'itemID'])
 
-    # 为每个user提供item候选列表，并构造为样本，用以预测top-N列表
     predict_data = []
     for uid, row in real_data.groupby('userID'):
         if random_candi > 0:
@@ -122,7 +106,6 @@ def evaluate_top_n(trained_model, dataloader: DataLoader, candidate_items, rando
     predict_data = pd.DataFrame(predict_data, columns=['userID', 'itemID', 'rating'])  # 'rating' is useless
     dlr = DataLoader(MFDataset(predict_data), batch_size=dataloader.batch_size)
 
-    # 开始为每个用户预测top-N列表
     top_n_list = defaultdict(list)
     with torch.no_grad():
         for batch in dlr:
@@ -136,7 +119,6 @@ def evaluate_top_n(trained_model, dataloader: DataLoader, candidate_items, rando
                     top_n_list[uid][-1] = (iid, p)
                 top_n_list[uid].sort(key=lambda x: -x[1])
 
-    # 计算召回率，精确率
     pred_pos, real_pos = 0, 0
     for uid, row in real_data.groupby('userID'):
         real_items = set(row['itemID'])

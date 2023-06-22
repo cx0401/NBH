@@ -18,18 +18,16 @@ def main():
     relation = pd.read_excel('data/task1/gpt_score.xlsx')
 
     df = pd.read_csv(config.dataset_file, usecols=['position_code', 'skill_id', 'skill_score'])
-    df.columns = ['position_id', 'skill_id', 'rating']  # Rename above columns for convenience
-    # map user(or item) to number
+    df.columns = ['position_id', 'skill_id', 'rating'] 
     df['userID'] = df.groupby(df['position_id']).ngroup()
     df['itemID'] = df.groupby(df['skill_id']).ngroup()
-    user_count = df['userID'].value_counts().count()  # 用户数量
-    item_count = df['itemID'].value_counts().count()  # item数量
+    user_count = df['userID'].value_counts().count() 
+    item_count = df['itemID'].value_counts().count()  
     print(f"{date()}## Dataset contains {df.shape[0]} records, {user_count} users and {item_count} items.")
 
     dataset = MFDataset(df)
     dlr = DataLoader(dataset, batch_size=config.batch_size)
 
-    # model = FunkSVD(user_count, item_count, config.embedding_dim).to(config.device)
     model = torch.load(config.saved_model)
 
     pos = model.user_emb
@@ -45,8 +43,6 @@ def main():
     pred = model.user_emb * gpt_embedding 
     result = pred.sum(dim=-1) + model.user_bias + gpt_bias + model.bias
     result = result / related.abs().sum()
-    # result = result / related.sum()
-
 
     mp_position = {df['userID'][i]:df['position_id'][i] for i, _ in enumerate(df['userID'])}
     position_codes = [mp_position[i] for i, user_id in enumerate(mp_position)]

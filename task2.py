@@ -23,15 +23,13 @@ def main():
     print(config)
 
     df = pd.read_csv(config.dataset_file, usecols=['position_code', 'skill_id', 'skill_score'])
-    df.columns = ['position_id', 'skill_id', 'rating']  # Rename above columns for convenience
-    # map user(or item) to number
+    df.columns = ['position_id', 'skill_id', 'rating']  
     df['userID'] = df.groupby(df['position_id']).ngroup()
     df['itemID'] = df.groupby(df['skill_id']).ngroup()
-    user_count = df['userID'].value_counts().count()  # 用户数量
-    item_count = df['itemID'].value_counts().count()  # item数量
+    user_count = df['userID'].value_counts().count() 
+    item_count = df['itemID'].value_counts().count()  
     print(f"{date()}## Dataset contains {df.shape[0]} records, {user_count} users and {item_count} items.")
 
-    # model = FunkSVD(user_count, item_count, config.embedding_dim).to(config.device)
     model = torch.load(config.saved_model)
 
     pos = model.user_emb

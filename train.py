@@ -16,10 +16,10 @@ class FunkSVD(nn.Module):
     def __init__(self, M, N, K=10):
         super().__init__()
         self.user_emb = nn.Parameter(torch.randn(M, K))
-        self.user_bias = nn.Parameter(torch.randn(M))  # 偏置
+        self.user_bias = nn.Parameter(torch.randn(M))
         self.item_emb = nn.Parameter(torch.randn(N, K))
         self.item_bias = nn.Parameter(torch.randn(N))
-        self.bias = nn.Parameter(torch.zeros(1))  # 全局偏置
+        self.bias = nn.Parameter(torch.zeros(1)) 
 
     def forward(self, user_id, item_id):
         pred = self.user_emb[user_id] * self.item_emb[item_id]
@@ -39,7 +39,7 @@ def train(train_dataloader, valid_dataloader, model, config, model_path):
 
     best_loss = 100
     for epoch in range(config.train_epochs):
-        model.train()  # 将模型设置为训练状态
+        model.train() 
         total_loss, total_samples = 0, 0
         for batch in train_dataloader:
             user_id, item_id, ratings = [i.to(config.device) for i in batch]
@@ -53,7 +53,7 @@ def train(train_dataloader, valid_dataloader, model, config, model_path):
             total_samples += len(predict)
 
         lr_sch.step()
-        model.eval()  # 停止训练状态
+        model.eval()
         valid_mse = evaluate_mse(model, valid_dataloader)
         train_loss = total_loss / total_samples
         print(f"{date()}#### Epoch {epoch:3d}; train mse {train_loss:.6f}; validation mse {valid_mse:.6f}")
@@ -77,21 +77,15 @@ def main():
     print(config)
 
     df = pd.read_csv(config.dataset_file, usecols=['position_code', 'skill_id', 'skill_score'])
-    df.columns = ['userID', 'itemID', 'rating']  # Rename above columns for convenience
-    # map user(or item) to number
+    df.columns = ['userID', 'itemID', 'rating'] 
     df['userID'] = df.groupby(df['userID']).ngroup()
     df['itemID'] = df.groupby(df['itemID']).ngroup()
-    user_count = df['userID'].value_counts().count()  # 用户数量
-    item_count = df['itemID'].value_counts().count()  # item数量
+    user_count = df['userID'].value_counts().count() 
+    item_count = df['itemID'].value_counts().count()  
     print(f"{date()}## Dataset contains {df.shape[0]} records, {user_count} users and {item_count} items.")
 
-    # 划分训练集、验证集、测试集；
-    # $方式1：按8:1:1的比例随机划分；
     train_data, valid_data = train_test_split(df, test_size=1 - 0.8, random_state=3)
     valid_data, test_data = train_test_split(valid_data, test_size=0.5, random_state=4)
-    # $方式2：对于每个评分值，抽取固定数量的样本作为验证集/测试集；
-    # train_data, valid_data = split_dataset(df, test_num_per_star=2000)
-    # valid_data, test_data = split_dataset(valid_data, test_num_per_star=1000)
 
     train_dataset = MFDataset(train_data)
     valid_dataset = MFDataset(valid_data)

@@ -7,8 +7,8 @@ class Config():
     train_epochs = 50
     batch_size = 1024
     learning_rate = 0.01
-    l2_regularization = 1e-3  # 正则化系数
-    learning_rate_decay = 0.99  # 学习率衰减程度
+    l2_regularization = 1e-3  
+    learning_rate_decay = 0.99  
     embedding_dim = 10
     device = torch.device("cuda:0")
 
