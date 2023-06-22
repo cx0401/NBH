@@ -14,13 +14,7 @@
 # Environments
 
 + python 3.8
-+ pytorch 1.70
-
-# Dataset
-
-1. Task1
-2. Task2
-3. Task3
++ pytorch 1.13.0
 
 # Running
 
