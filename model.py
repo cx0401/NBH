@@ -12,6 +12,6 @@ class FunkSVD(nn.Module):
         self.bias = nn.Parameter(torch.zeros(1))  
 
     def forward(self, user_id, item_id):
-        pred = self.user_emb[user_id] * self.item_emb[item_id]
-        pred = pred.sum(dim=-1) + self.user_bias[user_id] + self.item_bias[item_id] + self.bias
+        pred = (self.user_emb[user_id] + self.user_bias[user_id]) * (self.item_emb[item_id] + self.item_bias[item_id])+ self.bias
+        # pred = pred.sum(dim=-1) + self.user_bias[user_id] + self.item_bias[item_id] + self.bias
         return pred

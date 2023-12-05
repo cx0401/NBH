@@ -8,7 +8,7 @@ from torch import nn
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
 
-from config import Task1_config, Task2_2208_2212_config, Task2_2212_2304_config
+from config import Task1_config, Task2_2208_2212_config, Task2_2212_2304_config, Task4_config
 from utils import date, evaluate_mse, MFDataset, evaluate_top_n, evaluate_precision, split_dataset
 
 
@@ -71,7 +71,8 @@ def main():
     configs = {
         "task1": Task1_config(),
         "task2_2208_2212": Task2_2208_2212_config(),
-        "task2_2212_2304": Task2_2212_2304_config()
+        "task2_2212_2304": Task2_2212_2304_config(),
+        "task4": Task4_config()
     }
     config = configs[task]
     print(config)

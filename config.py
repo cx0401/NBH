@@ -31,3 +31,12 @@ class Task2_2212_2304_config(Config):
     result_file = 'results/gpt_impact_2212_2304.csv'
     similarity_file = 'results/similarity_2212_2304.csv'
     position_config_file = 'data/task2/gpt_2212_2304_position_code_name.json'
+
+class Task3_config(Config):
+    dataset_file = f'data/task3/Onet_triplet.tsv'
+    saved_model = f'models/task3_best_model.pt'
+    gpt_score_file = f'data/task3/ONET_annotation_0821.xlsx'
+    catory = 'AVERAGE'
+    # catory = 'GPT_AVG'
+    # catory = 'PEO_AVG'
+    result_file = f'results/task3_gpt_impact_{catory}.csv'
