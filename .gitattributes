@@ -1,1 +1,2 @@
 data/task2/gpt_2208_2212_skill.csv filter=lfs diff=lfs merge=lfs -text
+analysis.tar.gz filter=lfs diff=lfs merge=lfs -text
