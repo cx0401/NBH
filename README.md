@@ -13,10 +13,10 @@
    2. Compute the similarity. (results/similarity_2208_2212.csv, results/2212_2304/csv)
 3. Task3
 
-   1. Obtain the Onet Skill and corresponding scores. (data/task3/Skills.xlsx, data/task4/Onet_triplet.tsv)
-   2. Collect expert annotations. (data/task4/ONET_annotation_0821.xlsx)
+   1. Obtain the Onet Skill and corresponding scores. (data/task3/Skills.xlsx, data/task3/Onet_triplet.tsv)
+   2. Collect expert annotations. (data/task3/ONET_annotation_0821.xlsx)
    3. Obtain the features of positions and skills. (models/best_model.pt)
-   4. Aggregate these impacts to the occupational level. (results/task4_gpt_impact_AVERAGE.csv)
+   4. Aggregate these impacts to the occupational level. (results/task3_gpt_impact_AVERAGE.csv)
 4. Notice：
    Files in figures/ are stata data and codes for results 2.3 and 2.5.
 
