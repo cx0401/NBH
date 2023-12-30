@@ -17,6 +17,8 @@
    2. Collect expert annotations. (data/task4/ONET_annotation_0821.xlsx)
    3. Obtain the features of positions and skills. (models/best_model.pt)
    4. Aggregate these impacts to the occupational level. (results/task4_gpt_impact_AVERAGE.csv)
+4. Notice：
+ Files in figures/ are stata data and codes for results 2.3 and 2.5.
 
 # Environments
 
